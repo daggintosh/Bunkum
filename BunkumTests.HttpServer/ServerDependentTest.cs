@@ -1,4 +1,3 @@
-using Bunkum.CustomHttpListener.Listeners;
 using Bunkum.CustomHttpListener.Listeners.Direct;
 using Bunkum.HttpServer;
 using JetBrains.Annotations;
@@ -6,9 +5,9 @@ using JetBrains.Annotations;
 namespace BunkumTests.HttpServer;
 
 /*
- * Too much parallelization causes trouble, we don't need 220 threads trying to figure out if Dummy is authed or not
- * In the future, this should determine the amount of viable threads for doing tests,
- * we need to fit the tests into a more sane amount of threads
+ * Too much parallelization causes trouble, we don't need 220 threads trying to figure out if DummyUser is authed or not.
+ * In the future, this should determine the amount of threads to get the most performance while not draining precious system resources,
+ * especially on CI.
 */
 [Parallelizable]
 public class ServerDependentTest
