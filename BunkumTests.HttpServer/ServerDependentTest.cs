@@ -9,7 +9,6 @@ namespace BunkumTests.HttpServer;
  * In the future, this should determine the amount of threads to get the most performance while not draining precious system resources,
  * especially on CI.
 */
-[Parallelizable]
 public class ServerDependentTest
 {
     [Pure]
