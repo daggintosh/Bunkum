@@ -35,6 +35,7 @@ public partial class BunkumHttpServer
     private readonly List<IMiddleware> _middlewares = new();
     private readonly List<Service> _services = new();
 
+    public bool started = false;
     private BunkumHttpServer(bool setListener, bool logToConsole)
     {
         this._logger = new LoggerContainer<BunkumContext>();
@@ -102,7 +103,7 @@ public partial class BunkumHttpServer
             });
         }
     }
-    
+
     /// <summary>
     /// Start the server in single-threaded mode. Bunkum is responsible for blocking.
     /// </summary>
@@ -157,10 +158,11 @@ public partial class BunkumHttpServer
         this._logger.LogInfo(BunkumContext.Startup, $"Ready to go! Startup tasks took {stopwatch.ElapsedMilliseconds}ms.");
     }
 
-    [DoesNotReturn]
+    //[DoesNotReturn]
     private async Task Block()
     {
-        while (true)
+        this.started = true;
+        while (this.started)
             await this._listener.WaitForConnectionAsync(async context => await Task.Factory.StartNew(async () =>
             {
                 try

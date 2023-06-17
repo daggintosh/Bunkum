@@ -4,11 +4,7 @@ using JetBrains.Annotations;
 
 namespace BunkumTests.HttpServer;
 
-/*
- * Too much parallelization causes trouble, we don't need 220 threads trying to figure out if DummyUser is authed or not.
- * In the future, this should determine the amount of threads to get the most performance while not draining precious system resources,
- * especially on CI.
-*/
+//[Parallelizable]
 public class ServerDependentTest
 {
     [Pure]
@@ -22,5 +18,9 @@ public class ServerDependentTest
         if(start) server.Start(1);
 
         return (server, client);
+    }
+    private protected void TearDown(BunkumHttpServer server, HttpClient client)
+    {
+        server.started = false;
     }
 }

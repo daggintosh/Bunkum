@@ -17,5 +17,6 @@ public class AssemblyDiscoveryTests : ServerDependentTest
         
         msg = client.Send(new HttpRequestMessage(HttpMethod.Get, "/"));
         Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        this.TearDown(server, client);
     }
 }
