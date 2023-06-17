@@ -35,7 +35,7 @@ public partial class BunkumHttpServer
     private readonly List<IMiddleware> _middlewares = new();
     private readonly List<Service> _services = new();
 
-    public bool started = false;
+    public CancellationTokenSource cts = new();
     private BunkumHttpServer(bool setListener, bool logToConsole)
     {
         this._logger = new LoggerContainer<BunkumContext>();
@@ -96,11 +96,11 @@ public partial class BunkumHttpServer
         for (int i = 0; i < tasks; i++)
         {
             int threadN = i + 1;
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(async ()  =>
             {
                 this._logger.LogTrace(BunkumContext.Startup, $"Spinning up task {threadN}/{tasks}");
                 await this.Block();
-            });
+            }, this.cts.Token);
         }
     }
 
@@ -161,8 +161,8 @@ public partial class BunkumHttpServer
     //[DoesNotReturn]
     private async Task Block()
     {
-        this.started = true;
-        while (this.started)
+        bool cancellationRequested = false;
+        while (!cancellationRequested)
             await this._listener.WaitForConnectionAsync(async context => await Task.Factory.StartNew(async () =>
             {
                 try
@@ -175,6 +175,8 @@ public partial class BunkumHttpServer
 
                     if (database.IsValueCreated)
                         database.Value.Dispose();
+                    if (this.cts.Token.IsCancellationRequested)
+                        cancellationRequested = true;
                 }
                 catch (Exception e)
                 {

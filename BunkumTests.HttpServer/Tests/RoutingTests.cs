@@ -50,6 +50,7 @@ public class RoutingTests : ServerDependentTest
         Assert.That(await msg.Content.ReadAsStringAsync(), Is.EqualTo("asdf"));
         
         msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/sw/a"));
+        this.TearDown(server);
         Assert.That(await msg.Content.ReadAsStringAsync(), Is.EqualTo("a"));
     }
 
@@ -66,6 +67,7 @@ public class RoutingTests : ServerDependentTest
         server.AddEndpointGroup<RouteParameterEndpoints>();
         
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/param/" + text));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -87,6 +89,7 @@ public class RoutingTests : ServerDependentTest
         server.AddEndpointGroup<RouteParameterEndpoints>();
         
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/inlineParam/inline" + text));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -101,6 +104,7 @@ public class RoutingTests : ServerDependentTest
         server.AddEndpointGroup<RouteParameterEndpoints>();
         
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/params/asdf/fdsa"));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));

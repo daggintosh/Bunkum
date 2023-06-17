@@ -13,6 +13,7 @@ public class NullStatusCodeTests : ServerDependentTest
         server.AddEndpointGroup<NullEndpoints>();
 
         HttpResponseMessage resp = await client.GetAsync("/null?null=true");
+        this.TearDown(server);
         Assert.That(resp.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
     }
     
@@ -23,6 +24,7 @@ public class NullStatusCodeTests : ServerDependentTest
         server.AddEndpointGroup<NullEndpoints>();
 
         HttpResponseMessage resp = await client.GetAsync("/null?null=false");
+        this.TearDown(server);
         Assert.That(resp.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
 }

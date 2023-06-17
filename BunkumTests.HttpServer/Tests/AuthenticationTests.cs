@@ -15,6 +15,7 @@ public class AuthenticationTests : ServerDependentTest
         
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/auth"));
         
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -30,7 +31,7 @@ public class AuthenticationTests : ServerDependentTest
         
         client.DefaultRequestHeaders.Add("dummy-skip-auth", "true");
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/auth"));
-        
+        this.TearDown(server);
         Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
     }
     
@@ -42,6 +43,7 @@ public class AuthenticationTests : ServerDependentTest
         
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/token"));
         
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -58,6 +60,7 @@ public class AuthenticationTests : ServerDependentTest
         client.DefaultRequestHeaders.Add("dummy-skip-auth", "true");
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/token"));
         
+        this.TearDown(server);
         Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
     }
 }

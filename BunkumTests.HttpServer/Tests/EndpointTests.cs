@@ -17,6 +17,7 @@ public class EndpointTests : ServerDependentTest
         server.AddEndpointGroup<TestEndpoints>();
         
         msg = client.Send(new HttpRequestMessage(HttpMethod.Get, "/"));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -30,6 +31,7 @@ public class EndpointTests : ServerDependentTest
         (BunkumHttpServer? _, HttpClient? client) = this.Setup();
         
         HttpResponseMessage msg = client.Send(new HttpRequestMessage(HttpMethod.Get, "/"));
+
         Assert.Multiple(async () =>
         {
             Assert.That(await msg.Content.ReadAsStringAsync(), Is.EqualTo("Not found: /"));
@@ -51,6 +53,7 @@ public class EndpointTests : ServerDependentTest
         });
         
         msg = client.Send(new HttpRequestMessage(HttpMethod.Get, "/b"));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));

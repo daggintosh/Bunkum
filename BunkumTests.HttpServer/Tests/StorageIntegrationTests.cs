@@ -18,6 +18,7 @@ public class StorageIntegrationTests : ServerDependentTest
         Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         
         msg = await client.GetAsync("/storage/get");
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));

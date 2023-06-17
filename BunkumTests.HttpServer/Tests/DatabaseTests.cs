@@ -28,6 +28,7 @@ public class DatabaseTests : ServerDependentTest
         server.AddEndpointGroup<DatabaseEndpoints>();
 
         HttpResponseMessage msg = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/db/value"));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(msg.StatusCode, Is.EqualTo(HttpStatusCode.OK));

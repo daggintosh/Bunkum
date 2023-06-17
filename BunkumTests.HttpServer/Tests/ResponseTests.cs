@@ -19,6 +19,7 @@ public class ResponseTests : ServerDependentTest
         server.AddEndpointGroup<ResponseEndpoints>();
         
         HttpResponseMessage msg = client.Send(new HttpRequestMessage(HttpMethod.Get, endpoint));
+        this.TearDown(server);
         Assert.Multiple(async () =>
         {
             Assert.That(await msg.Content.ReadAsStringAsync(), Is.EqualTo("works"));
@@ -41,6 +42,7 @@ public class ResponseTests : ServerDependentTest
         XmlSerializer serializer = new(typeof(ResponseSerializationObject));
 
         ResponseSerializationObject? obj = (ResponseSerializationObject?)serializer.Deserialize(new MemoryStream(Encoding.Default.GetBytes(text)));
+        this.TearDown(server);
         Assert.That(obj, Is.Not.Null);
         Assert.That(obj!.Value, Is.EqualTo(69));
     }
@@ -59,6 +61,7 @@ public class ResponseTests : ServerDependentTest
         // technically we probably dont need to test deserialization but we should anyways
         ResponseSerializationObject? obj = JsonConvert.DeserializeObject<ResponseSerializationObject>(text);
         
+        this.TearDown(server);
         Assert.That(obj, Is.Not.Null);
         Assert.That(obj!.Value, Is.EqualTo(69));
     }
