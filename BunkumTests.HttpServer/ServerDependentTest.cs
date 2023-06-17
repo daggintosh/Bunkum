@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace BunkumTests.HttpServer;
 
-[Parallelizable]
+//[Parallelizable]
 public class ServerDependentTest
 {
     [Pure]
@@ -15,7 +15,7 @@ public class ServerDependentTest
 
         BunkumHttpServer server = new(listener);
         server.AddAuthenticationService();
-        if(start) server.Start();
+        if(start) server.Start(1);
 
         return (server, client);
     }
